@@ -6,7 +6,7 @@
 /*   By: tristan <tristan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 11:22:04 by tristan           #+#    #+#             */
-/*   Updated: 2024/01/30 16:22:49 by tristan          ###   ########.fr       */
+/*   Updated: 2024/02/04 18:02:19 by tristan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void parse_variables(int argc, char** argv){
 			}
 		}
 		else{
-			if(char_set_in_string("123456789.", argv[i]) == 0){
+			if(char_set_in_string("123456789.", argv[i]) == 1){
 				glob_vars.ip = argv[i];
 				glob_vars.domain = NULL;
 			}
@@ -64,13 +64,34 @@ int main(int argc, char** argv){
 		fprintf(stderr, "ping: usage error: %s", "Destination address required\n");
 		exit(EXIT_FAILURE);
 	}
+
 	glob_vars.domain = NULL;
 	glob_vars.ip = NULL;
 	glob_vars.verbose = 0;
+
 	parse_variables(argc, argv);
-	if (glob_vars.ip != NULL)
+
+	if (glob_vars.ip != NULL){
 		printf(glob_vars.ip);
-	if (glob_vars.domain != NULL)
+		printf(";");}
+	if (glob_vars.domain != NULL){
 		printf(glob_vars.domain);
-	
+		printf(";");}
+
+	int socketfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+	if (socketfd == -1){
+		fprintf(stderr, "ping: error: %s", "Failed to create socket\n");
+		exit(EXIT_FAILURE);
+	}
+
+	struct sockaddr_in dest_address;
+	ft_memset(&dest_address, 0, sizeof(dest_address));
+	dest_address.sin_family = AF_INET;
+	if (glob_vars.ip != NULL){
+		if (inet_pton(AF_INET, glob_vars.ip, &dest_address.sin_addr) <= 0){
+			fprintf(stderr, "ping: %s %s", glob_vars.ip ,": Name or service not known\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+	exit(0);
 }

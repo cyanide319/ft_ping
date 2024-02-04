@@ -6,7 +6,7 @@
 /*   By: tristan <tristan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 11:24:00 by tristan           #+#    #+#             */
-/*   Updated: 2024/01/30 16:21:56 by tristan          ###   ########.fr       */
+/*   Updated: 2024/02/04 17:45:18 by tristan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 //#include <>
 
 struct vars	{
 	int		verbose;
 	char	*ip;
 	char	*domain;
+	const char *IP;
 };
 
 //utils
